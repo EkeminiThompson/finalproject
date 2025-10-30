@@ -1,46 +1,66 @@
 ```mermaid
-%%{init: {
-  "theme": "base",
-  "themeVariables": {
-    "background": "#ffffff",
-    "primaryColor": "#E3F2FD",
-    "primaryTextColor": "#0D47A1",
-    "primaryBorderColor": "#1976D2",
-    "lineColor": "#1976D2"
-  }
-}}%%
 flowchart TD
-    %% Nodes
-    A([Start: Raw Sensor Data Ingestion])
-    B([Week 1: Objective 1 - Data Collection and Preprocessing - CMAPSS and AI4I with Nigerian Perturbations])
-    C([Domain Diagnostics - Compute MMD or Wasserstein on vibration, pressure, and temperature])
-    D{{Shift Threshold Exceeded?  MMD > 0.4}}
-    E([Deploy Baseline Model])
-    F([Trigger Adaptation])
-    G([Continuous Monitoring])
-    H([Week 2-3: Objective 2 - Hybrid Training using Transformer, GRL, and SimCLR Self-Supervision])
-    I([Week 4: Objective 3 - Multifaceted Evaluation - AUPRC > 0.85, RMSE < 13.5, TCO Savings > 20%])
-    J{{Success Confirmed?}}
-    K([Objective 4: Generate Deployment Protocols - Cloud Self-Learning API for Warri Refinery])
-    L([End: Live PdM Deployment - Monitor and Iterate])
+    %% Source Datasets
+    A[Source Datasets<br/><small>CMAPSS: 21k cycles<br/>AI4I: 10k instances</small>] 
 
-    %% Flow
-    A --> B --> C --> D
-    D -->|No| E --> G --> C
-    D -->|Yes| F --> H --> I --> J
-    J -->|Yes| K --> L
-    J -->|No| F
+    %% Preprocessing
+    B[Preprocessing<br/><small>Z-score, Window=30</small>]
 
-    %% Colors (GitHub-safe names)
-    classDef startNode fill:#BBDEFB,stroke:#1565C0,color:#0D47A1;
-    classDef objectiveNode fill:#C8E6C9,stroke:#2E7D32,color:#1B5E20;
-    classDef decisionNode fill:#FFF9C4,stroke:#FBC02D,color:#5D4037;
-    classDef processNode fill:#FFE0B2,stroke:#EF6C00,color:#4E342E;
-    classDef endNode fill:#D1C4E9,stroke:#512DA8,color:#1A237E;
+    %% Source Embeddings
+    C[Source Embeddings<br/><small>Transformer</small>]
 
-    class A startNode;
-    class B,H,I,K objectiveNode;
-    class C,E,F,G processNode;
-    class D,J decisionNode;
-    class L endNode;
+    %% Nigerian Perturbations
+    D[Nigerian Perturbations<br/><small>Humidity 80% Drift<br/>Sabotage Spikes<br/>Power Dropout 30%</small>]
+
+    %% Target Synthesis
+    E[Target Synthesis<br/><small>SDV GaussianCopula</small>]
+
+    %% Target Embeddings
+    F[Target Embeddings<br/><small>w/ Nigerian Noise</small>]
+
+    %% Gradient Reversal Layer
+    G[Gradient Reversal Layer<br/><small>GRL λ=0.1</small>]
+
+    %% Domain Discriminator
+    H[Domain Discriminator]
+
+    %% RUL Predictor
+    I[RUL Predictor<br/><small>XGBoost + Weibull</small>]
+
+    %% SimCLR Self-Supervised
+    J[SimCLR Self-Supervised<br/><small>Alignment (70% Unlabeled)</small>]
+
+    %% Multifaceted Outputs
+    K[Multifaceted Outputs<br/><small>• AUPRC (Imbalanced Failures)<br/>• RMSE/MAE (RUL Cycles)<br/>• TCO (Monte Carlo, $10M/day Downtime)</small>]
+
+    %% Deployment
+    L[Deployment Protocols<br/><small>FastAPI + Docker</small>]
+
+    %% Connections
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+    F --> G
+    G --> H
+    G --> I
+    C --> J
+    F --> J
+    J --> K
+    K --> L
+
+    %% Styling
+    classDef dataset fill:#E8F5E9,stroke:#4CAF50,stroke-width:2px,color:#1B5E20
+    classDef process fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#0D47A1
+    classDef model fill:#FFF3E0,stroke:#F57C00,stroke-width:2px,color:#E65100
+    classDef output fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#4A148C
+    classDef deploy fill:#E0F2F1,stroke:#00695C,stroke-width:2px,color:#004D40
+
+    class A dataset
+    class B,D,E process
+    class C,F,G model
+    class H,I,J model
+    class K output
+    class L deploy
 ```
